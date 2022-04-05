@@ -19,7 +19,7 @@ namespace mid2chart {
                     if (s.year != "") file.WriteLine("\tYear = \", " + s.year + "\"");
                     if (s.charter != "") file.WriteLine("\tCharter = \"" + s.charter + "\"");
                     file.WriteLine("\tOffset = " + GetOffsetString(s.offset));
-                    file.WriteLine("\tResolution = 192");
+                    file.WriteLine("\tResolution = " + Program.targetRes);
                     file.WriteLine("\tPlayer2 = bass");
                     file.WriteLine("\tDifficulty = 0");
                     file.WriteLine("\tPreviewStart = 0.00");
@@ -376,7 +376,7 @@ namespace mid2chart {
         }
 
         private static long GetPreviousNoteDiff(Note n, List<Event> notes) {
-            if (notes[0] == n) return 192;
+            if (notes[0] == n) return Program.targetRes;
             else {
                 for (int i = notes.IndexOf(n) - 1; i >= 0; i--) {
                     var previousNote = notes[i] as Note;
@@ -386,7 +386,7 @@ namespace mid2chart {
 
                 }
             }
-            return 192;
+            return Program.targetRes;
         }
 
         private static bool IsTap(Note n, List<NoteSection> tap) {

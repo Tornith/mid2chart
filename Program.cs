@@ -7,6 +7,8 @@ namespace mid2chart {
         internal static bool editable, rbLogic, broken, fixForces, fixSp, fixDoubleHopo, dontForceChords,
             fixOverlaps, eighthHopo, sixteenthStrum, keysOnBass, keysOnGuitar, bassOnGuitar,
             gh1, skipPause, readOpenNotes, openNoteStrum, dontWriteDummy, unforceNAudioStrictMode, tapToHopo;
+
+        internal static int targetRes = 192;
         static void Main(string[] args) {
             if (args.Length == 0) {
                 Console.WriteLine("Usage: drag and drop one or more .mid files into this executable file.");
@@ -27,6 +29,7 @@ namespace mid2chart {
                 Console.WriteLine("Use the parameter \"-m\" to NOT write a (Dummy).chart file");
                 Console.WriteLine("Use the parameter \"-p\" to read and write open notes.");
                 Console.WriteLine("Use the parameter \"-os\" to convert open notes as strum by default, unless forced otherwise.");
+                Console.WriteLine("Use the parameter \"-rs <int>\" to convert to a target chart resolution");
                 Console.WriteLine("Use the parameter \"-kb\" to swap keys and bass when converting the midi.");
                 Console.WriteLine("Use the parameter \"-kg\" to swap keys and guitar when converting the midi.");
                 Console.WriteLine("Use the parameter \"-gb\" to swap guitar and bass when converting the midi.");
@@ -76,6 +79,11 @@ namespace mid2chart {
                                 Console.WriteLine(" is already set. Swap guitar and bass will be ignored.");
                             }
                             break;
+                        case "-rs":
+                            if (i < args.Length - 1 && int.TryParse(args[i + 1], out int res)) {
+                                targetRes = res;
+                            }
+                            break;
                     }
                 }
                 for (int i = 0; i < args.Length; i++) {
@@ -85,7 +93,7 @@ namespace mid2chart {
                         && (args[i] != "-16") && (args[i] != "-kb") && (args[i] != "-kg")
                         && (args[i] != "-gb") && (args[i] != "-1") && (args[i] != "-k")
                         && (args[i] != "-p") && (args[i] != "-m") && (args[i] != "-os")
-                        && (args[i] != "-u") && (args[i] != "-t")) {
+                        && (args[i] != "-u") && (args[i] != "-t") && (args[i] != "-rs") && (!int.TryParse(args[i], out _))) {
                         try {
                             Stopwatch.Step("Reading midi: " + args[i]);
                             Song s = MidReader.ReadMidi(args[i], unforceNAudioStrictMode);

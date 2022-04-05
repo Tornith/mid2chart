@@ -12,7 +12,7 @@ namespace mid2chart {
             s = new Song();
             midi = new MidiFile(path, !unforceNAudioStrictMode);
             var trackCount = midi.Events.Count();
-            scaler = 192.0D / midi.DeltaTicksPerQuarterNote;
+            scaler = ((double) Program.targetRes) / midi.DeltaTicksPerQuarterNote;
             WriteSync(midi.Events[0]);
             for (var i = 1; i < trackCount; i++) {
                 var trackName = midi.Events[i][0] as TextEvent;
@@ -308,34 +308,7 @@ namespace mid2chart {
         }
 
         private static long RoundToValidValue(long tick) {
-            long a = tick+(16-(tick%16));
-            long b = tick-(tick%16);
-            long c = tick+(12-(tick%12));
-            long d = tick-(tick%12);
-            long ab; long cd;
-            if (a-tick < -(b-tick))
-                ab = a;
-            else
-                ab = b;
-            if (c-tick < -(d-tick))
-                cd = c;
-            else
-                cd = d;
-            long abd; long cdd;
-            if (tick-ab < 0)
-                abd = -(tick-ab);
-            else
-                abd = tick-ab;
-            if (tick-cd < 0)
-                cdd = -(tick-cd);
-            else
-                cdd = tick-cd;
-            long tickd;
-            if (abd < cdd)
-                tickd = tick-(tick-ab);
-            else
-                tickd = tick-(tick-cd);
-            return tickd;
+            return tick;
         }
     }
 }
